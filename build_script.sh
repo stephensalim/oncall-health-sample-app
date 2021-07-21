@@ -14,8 +14,11 @@ echo "# Provision Repo >> Complete"
 
 echo "# Prepare application repo"
 cd ~/environment/oncall-health-sample-app/oncall-health
+git config --global init.defaultBranch master
 git init
 git remote add origin codecommit://oncall-health
+git add -A
+git commit -m "init"
 git push -u origin master
 echo "# Prepare application repo >> Complete"
 
