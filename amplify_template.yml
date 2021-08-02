@@ -80,5 +80,5 @@ Outputs:
   AppURL:
       Description: oncall-health-sample-app URL
       Value: !Sub
-        - "https://master.{AppId}.amplifyapp.com"
+        - "https://master.${AppId}.amplifyapp.com"
         - AppId: !GetAtt AmplifyApp.AppId
