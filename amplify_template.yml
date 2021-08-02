@@ -79,9 +79,6 @@ Outputs:
     Value: !GetAtt AmplifyApp.AppId
   AppURL:
       Description: oncall-health-sample-app URL
-      Value:
-        Fn::Join:
-        - ""	
-        - - "https://master.""
-          - !GetAtt AmplifyApp.AppId
-          - ".amplifyapp.com"
+      Value: !Sub
+        - "https://master.{AppId}.amplifyapp.com"
+        - AppId: !GetAtt AmplifyApp.AppId
