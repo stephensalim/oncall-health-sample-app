@@ -77,3 +77,11 @@ Resources:
 Outputs:
   OutputAppId:
     Value: !GetAtt AmplifyApp.AppId
+  AppURL:
+      Description: oncall-health-sample-app URL
+      Value:
+        Fn::Join:
+        - ""	
+        - - https://master.
+          - !GetAtt AmplifyApp.AppId
+          - .amplifyapp.com

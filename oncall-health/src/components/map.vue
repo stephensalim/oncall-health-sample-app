@@ -49,14 +49,14 @@ var config = require('../config.js')
                         }
                     });
 
-                    var unicornSymbol = new PictureMarkerSymbol({
-                        url: '/images/unicorn-icon.png',
+                    var carunitSymbol = new PictureMarkerSymbol({
+                        url: '/images/carunit-icon.png',
                         width: '80px',
                         height: '49px'
                     });
 
                     var pinGraphic;
-                    var unicornGraphic;
+                    var carunitGraphic;
 
                     function updateCenter(newValue) {
                         self.webmap.center = {
@@ -122,12 +122,12 @@ var config = require('../config.js')
                                 longitude: origin.longitude + deltaLon,
                                 latitude: origin.latitude + deltaLat
                             });
-                            view.graphics.remove(unicornGraphic)
-                            unicornGraphic = new Graphic({
+                            view.graphics.remove(carunitGraphic)
+                            carunitGraphic = new Graphic({
                                 geometry: point,
-                                symbol: unicornSymbol
+                                symbol: carunitSymbol
                             });
-                            view.graphics.add(unicornGraphic)
+                            view.graphics.add(carunitGraphic)
                             
                             if (progressPct < 1) {
                                 requestAnimationFrame(step)
@@ -151,9 +151,9 @@ var config = require('../config.js')
                 },
                 go: function (event){
                     this.webmap = event
-                    this.requestUnicorn(this.webmap.selectedPoint);
+                    this.requestCarunit(this.webmap.selectedPoint);
                 },
-                requestUnicorn: function(pickupLocation){
+                requestCarunit: function(pickupLocation){
                         self = this
                         axios({
                             method: 'POST',
@@ -176,20 +176,17 @@ var config = require('../config.js')
                         .catch(function (error) {
                             // handle error
                             console.error('Error requesting ride: ', error);
-                            alert('An error occured when requesting your unicorn:\n' + error);
+                            alert('An error occured when requesting your carunit:\n' + error);
                         })
 
                 },
-                completeRequest: function (unicornResponse) {
-                    console.log('Response received from API: ', unicornResponse);
-                    var unicorn;
-                    var pronoun;
-                    unicorn = unicornResponse.Unicorn;
-                    pronoun = unicorn.Gender === 'Male' ? 'his' : 'her';
-                    this.displayUpdate(unicorn.Name + ', your BlueCar, is on ' + pronoun + ' way.');
+                completeRequest: function (carunitResponse) {
+                    console.log('Response received from API: ', carunitResponse);
+                    var carunit;
+                    carunit = carunitResponse.Carunit;
+                    this.displayUpdate(carunit.Name + ', your BlueCar, Year ' + carunit.Year + ' is on it\'s way.');
                     this.animateArrival(function animateCallback() {
-                        self.displayUpdate(unicorn.Name + ' has arrived!');
-                        //self.webmap.unsetLocation();
+                        self.displayUpdate(carunit.Name + ' has arrived!');
                     });
                 },
                 displayUpdate: function(text) {

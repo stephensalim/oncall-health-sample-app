@@ -23,21 +23,21 @@
 
       <div class="column">
         <div class="home-about-block">
-          <h3 class="title icon-unicorn">Request A BlueCar</h3>
+          <h3 class="title icon-carunit">Pick a Location</h3>
           <p class="content">When an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries.s</p>
         </div>
       </div>
 
       <div class="column">
         <div class="home-about-block">
-          <h3 class="title icon-price">Pick A Price</h3>
+          <h3 class="title icon-carunit">Request BlueCar</h3>
           <p class="content">It has survived not only five centuries, but also the leap into electronic typesetting.</p>
         </div>
       </div>
 
       <div class="column">
         <div class="home-about-block">
-          <h3 class="title icon-success">Ride Off To Success!</h3>
+          <h3 class="title icon-carunit">Get your Help</h3>
           <p class="content">It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus.</p>
         </div>
       </div>

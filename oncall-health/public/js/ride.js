@@ -1,11 +1,11 @@
-/*global WildRydes _config*/
+/*global BlueCarHealth _config*/
 
-var WildRydes = window.WildRydes || {};
-WildRydes.map = WildRydes.map || {};
+var BlueCarHealth = window.BlueCarHealth || {};
+BlueCarHealth.map = BlueCarHealth.map || {};
 
 (function rideScopeWrapper($) {
     var authToken;
-    WildRydes.authToken.then(function setAuthToken(token) {
+    BlueCarHealth.authToken.then(function setAuthToken(token) {
         if (token) {
             authToken = token;
         } else {
@@ -15,7 +15,7 @@ WildRydes.map = WildRydes.map || {};
         alert(error);
         window.location.href = '/signin.html';
     });
-    function requestUnicorn(pickupLocation) {
+    function requestCarunit(pickupLocation) {
         $.ajax({
             method: 'POST',
             url: _config.api.invokeUrl + '/ride',
@@ -33,21 +33,20 @@ WildRydes.map = WildRydes.map || {};
             error: function ajaxError(jqXHR, textStatus, errorThrown) {
                 console.error('Error requesting ride: ', textStatus, ', Details: ', errorThrown);
                 console.error('Response: ', jqXHR.responseText);
-                alert('An error occured when requesting your unicorn:\n' + jqXHR.responseText);
+                alert('An error occured when requesting your carunit:\n' + jqXHR.responseText);
             }
         });
     }
 
     function completeRequest(result) {
-        var unicorn;
-        var pronoun;
+        var carunit;
         console.log('Response received from API: ', result);
-        unicorn = result.Unicorn;
-        pronoun = unicorn.Gender === 'Male' ? 'his' : 'her';
-        displayUpdate(unicorn.Name + ', your ' + unicorn.Color + ' unicorn, is on ' + pronoun + ' way.');
+        carunit = result.Carunit;
+        carunit.Year 
+        displayUpdate(carunit.Name + ', your ' + carunit.Color + ' carunit, Year ' + carunit.Year  + 'is on it\'s way.');
         animateArrival(function animateCallback() {
-            displayUpdate(unicorn.Name + ' has arrived. Giddy up!');
-            WildRydes.map.unsetLocation();
+            displayUpdate(carunit.Name + ' has arrived.');
+            BlueCarHealth.map.unsetLocation();
             $('#request').prop('disabled', 'disabled');
             $('#request').text('Set Pickup');
         });
@@ -57,13 +56,13 @@ WildRydes.map = WildRydes.map || {};
     $(function onDocReady() {
         $('#request').click(handleRequestClick);
         $('#signOut').click(function() {
-            WildRydes.signOut();
+            BlueCarHealth.signOut();
             alert("You have been signed out.");
             window.location = "signin.html";
         });
-        $(WildRydes.map).on('pickupChange', handlePickupChanged);
+        $(BlueCarHealth.map).on('pickupChange', handlePickupChanged);
 
-        WildRydes.authToken.then(function updateAuthMessage(token) {
+        BlueCarHealth.authToken.then(function updateAuthMessage(token) {
             if (token) {
                 displayUpdate('You are authenticated. Click to see your <a href="#authTokenModal" data-toggle="modal">auth token</a>.');
                 $('.authToken').text(token);
@@ -77,33 +76,33 @@ WildRydes.map = WildRydes.map || {};
 
     function handlePickupChanged() {
         var requestButton = $('#request');
-        requestButton.text('Request Unicorn');
+        requestButton.text('Request Carunit');
         requestButton.prop('disabled', false);
     }
 
     function handleRequestClick(event) {
-        var pickupLocation = WildRydes.map.selectedPoint;
+        var pickupLocation = BlueCarHealth.map.selectedPoint;
         event.preventDefault();
-        requestUnicorn(pickupLocation);
+        requestCarunit(pickupLocation);
     }
 
     function animateArrival(callback) {
-        var dest = WildRydes.map.selectedPoint;
+        var dest = BlueCarHealth.map.selectedPoint;
         var origin = {};
 
-        if (dest.latitude > WildRydes.map.center.latitude) {
-            origin.latitude = WildRydes.map.extent.minLat;
+        if (dest.latitude > BlueCarHealth.map.center.latitude) {
+            origin.latitude = BlueCarHealth.map.extent.minLat;
         } else {
-            origin.latitude = WildRydes.map.extent.maxLat;
+            origin.latitude = BlueCarHealth.map.extent.maxLat;
         }
 
-        if (dest.longitude > WildRydes.map.center.longitude) {
-            origin.longitude = WildRydes.map.extent.minLng;
+        if (dest.longitude > BlueCarHealth.map.center.longitude) {
+            origin.longitude = BlueCarHealth.map.extent.minLng;
         } else {
-            origin.longitude = WildRydes.map.extent.maxLng;
+            origin.longitude = BlueCarHealth.map.extent.maxLng;
         }
 
-        WildRydes.map.animate(origin, dest, callback);
+        BlueCarHealth.map.animate(origin, dest, callback);
     }
 
     function displayUpdate(text) {

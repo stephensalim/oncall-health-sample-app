@@ -64,17 +64,17 @@ Resources:
                 {
                     Name: 'TX5400',
                     Color: 'Dark Blue',
-                    Gender: 'Male',
+                    Year: '2020',
                 },
                 {
                     Name: 'BXC500',
                     Color: 'Light Blue',
-                    Gender: 'Male',
+                    Year: '2021',
                 },
                 {
                     Name: 'XSA003',
                     Color: 'Regular Blue',
-                    Gender: 'Female',
+                    Year: '2021',
                 },
             ];
 
@@ -86,35 +86,20 @@ Resources:
 
                 const rideId = toUrlString(randomBytes(16));
                 console.log('Received event (', rideId, '): ', event);
-
-                // Because we're using a Cognito User Pools authorizer, all of the claims
-                // included in the authentication token are provided in the request context.
-                // This includes the username as well as other attributes.
                 const username = event.requestContext.authorizer.claims['cognito:username'];
-
-                // The body field of the event in a proxy integration is a raw string.
-                // In order to extract meaningful values, we need to first parse this string
-                // into an object. A more robust implementation might inspect the Content-Type
-                // header first and use a different parsing strategy based on that value.
                 const requestBody = JSON.parse(event.body);
 
                 const pickupLocation = requestBody.PickupLocation;
 
-                const unicorn = findUnicorn(pickupLocation);
+                const carunit = findCarunit(pickupLocation);
 
-                recordRide(rideId, username, unicorn).then(() => {
-                    // You can use the callback function to provide a return value from your Node.js
-                    // Lambda functions. The first parameter is used for failed invocations. The
-                    // second parameter specifies the result data of the invocation.
-
-                    // Because this Lambda function is called by an API Gateway proxy integration
-                    // the result object must use the following structure.
+                recordRide(rideId, username, carunit).then(() => {
                     callback(null, {
                         statusCode: 201,
                         body: JSON.stringify({
                             RideId: rideId,
-                            Unicorn: unicorn,
-                            UnicornName: unicorn.Name,
+                            Carunit: carunit,
+                            CarunitName: carunit.Name,
                             Eta: '30 seconds',
                             Rider: username,
                         }),
@@ -124,31 +109,23 @@ Resources:
                     });
                 }).catch((err) => {
                     console.error(err);
-
-                    // If there is an error during processing, catch it and return
-                    // from the Lambda function successfully. Specify a 500 HTTP status
-                    // code and provide an error message in the body. This will provide a
-                    // more meaningful error response to the end client.
                     errorResponse(err.message, context.awsRequestId, callback)
                 });
             };
 
-            // This is where you would implement logic to find the optimal unicorn for
-            // this ride (possibly invoking another Lambda function as a microservice.)
-            // For simplicity, we'll just pick a unicorn at random.
-            function findUnicorn(pickupLocation) {
-                console.log('Finding unicorn for ', pickupLocation.Latitude, ', ', pickupLocation.Longitude);
+            function findCarunit(pickupLocation) {
+                console.log('Finding carunit for ', pickupLocation.Latitude, ', ', pickupLocation.Longitude);
                 return fleet[Math.floor(Math.random() * fleet.length)];
             }
 
-            function recordRide(rideId, username, unicorn) {
+            function recordRide(rideId, username, carunit) {
                 return ddb.put({
                     TableName: 'Rides',
                     Item: {
                         RideId: rideId,
                         User: username,
-                        Unicorn: unicorn,
-                        UnicornName: unicorn.Name,
+                        Carunit: carunit,
+                        CarunitName: carunit.Name,
                         RequestTime: new Date().toISOString(),
                     },
                 }).promise();
@@ -189,7 +166,7 @@ Resources:
       EndpointConfiguration:
         Types:
           - REGIONAL
-      Name: "WildRydes"
+      Name: "BlueCarHealth"
 
   AppRestApiAuthorizer:
     Type: 'AWS::ApiGateway::Authorizer'
@@ -197,7 +174,7 @@ Resources:
       Type: COGNITO_USER_POOLS
       ProviderARNs: [ !Ref CognitoUserPoolArn ]
       IdentitySource: method.request.header.Authorization
-      Name: "WildRydes"
+      Name: "BlueCarHealth"
       RestApiId: !Ref AppRestApi
 
   AppRestApiRideResource:
