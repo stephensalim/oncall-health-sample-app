@@ -30,8 +30,9 @@ APPID=$(aws cloudformation describe-stacks --stack-name oncall-health-amplify | 
 aws amplify start-job --app-id $APPID --branch-name master --job-type RELEASE
 echo "# Provision Amplify Console Stack >> Complete"
 
-echo "# Provision Amplify Auth"
+echo "# Provision Amplify Auth & Artillery"
 npm install -g @aws-amplify/cli
+npm install -g artillery
 echo '[profile default]' > ~/.aws/config
 cd ~/environment/oncall-health-sample-app/oncall-health
 AMPLIFY="{\
