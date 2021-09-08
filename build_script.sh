@@ -33,6 +33,7 @@ echo "# Provision Amplify Console Stack >> Complete"
 echo "# Provision Amplify Auth & Artillery"
 npm install -g @aws-amplify/cli
 npm install -g artillery
+npm install --prefix ./layers/xray-sdk/nodejs/
 echo '[profile default]' > ~/.aws/config
 cd ~/environment/oncall-health-sample-app/oncall-health
 AMPLIFY="{\
@@ -61,7 +62,15 @@ echo "# Provision Amplify Auth >> Complete"
 
 echo "# Provision Amplify Api"
 cd ~/environment/oncall-health-sample-app/
-aws cloudformation create-stack --stack-name oncall-health-amplify-api --template-body file://amplify_api_template.yml --parameters ParameterKey="CognitoUserPoolArn",ParameterValue="$COGNITO_USERPOOL_ARN" --capabilities CAPABILITY_IAM 
+#aws cloudformation create-stack --stack-name oncall-health-amplify-api --template-body file://amplify_api_template.yml --parameters ParameterKey="CognitoUserPoolArn",ParameterValue="$COGNITO_USERPOOL_ARN" --capabilities CAPABILITY_IAM 
+
+BUCKET_NAME="sam-artifact-${APPID}"
+echo $BUCKET_NAME
+aws s3 mb s3://$BUCKET_NAME
+sleep 1
+sam package --s3-bucket $BUCKET_NAME --output-template-file out.yaml -t amplify_api_template.yml
+sam deploy --template-file out.yaml --capabilities CAPABILITY_IAM --stack-name oncall-health-amplify-api  --parameter-overrides ParameterKey="CognitoUserPoolArn",ParameterValue="$COGNITO_USERPOOL_ARN"
+
 aws cloudformation wait stack-create-complete --stack-name oncall-health-amplify-api
 
 API_ENDPOINT=$(aws cloudformation describe-stacks --stack-name oncall-health-amplify-api | jq '.Stacks[0].Outputs[] | select(.OutputKey == "ApiEndpoint") | .OutputValue' | sed -e 's/^"//' -e 's/"$//' -e 's/\//#/g')

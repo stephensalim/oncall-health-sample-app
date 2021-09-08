@@ -1,12 +1,12 @@
 config:
-  target: 'https://2j948hd8hj.execute-api.ap-southeast-1.amazonaws.com/prod/'
+  target: '<Your API Invoke URL>'
   phases:
     - duration: 10
-      arrivalRate: 100
+      arrivalRate: 200
   processor: "./loadTestFunction.js"
   defaults:
     headers:
-      Authorization: 'Bearer eyJraWQiOiJNSGZZXC9kM0dcL0dWMEZ6YXNwOWpJMEVkOFhFbjFVMEpRU0g0dHFwdWl0YzA9IiwiYWxnIjoiUlMyNTYifQ.eyJzdWIiOiIzOTMwNDVjMi03NWQ5LTRiM2UtOWY3NS0xODk1ZTYyYWJiZmQiLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwiaXNzIjoiaHR0cHM6XC9cL2NvZ25pdG8taWRwLmFwLXNvdXRoZWFzdC0xLmFtYXpvbmF3cy5jb21cL2FwLXNvdXRoZWFzdC0xX294cERBbUxUcSIsInBob25lX251bWJlcl92ZXJpZmllZCI6ZmFsc2UsImNvZ25pdG86dXNlcm5hbWUiOiJqYW5naGFuIiwib3JpZ2luX2p0aSI6ImVjYWUyMjFmLWEwMGEtNDA1NC04MmQxLWViNGU5MGIwYzU4YyIsImF1ZCI6IjExMDc0a3JiaXVuMzc5Y2QwNmk4dW1mazJpIiwiZXZlbnRfaWQiOiI3MDM3NzJiYy0wMGE4LTQ1YTctODk0ZS0zYTJiYzhkNGUwMzQiLCJ0b2tlbl91c2UiOiJpZCIsImF1dGhfdGltZSI6MTYyODU4NTI5NiwicGhvbmVfbnVtYmVyIjoiKzExMjM0MTIzNCIsImV4cCI6MTYyODYwOTM2OSwiaWF0IjoxNjI4NjA1NzY5LCJqdGkiOiI5NmZhNjhiZi02ZmQzLTRiZDEtOGFkMS0zMmNkOWZiODI2NjkiLCJlbWFpbCI6ImphbmdoYW5AYW1hem9uLmNvbSJ9.f0xERlz4BMEiBFJY2SRw12OVzOqWlVmQfK4QgUxw46LQIBLG88KtrtANnkVXo53E4k1w7Qg4KrY7iK5dkqIE5sEexQMSwhFpu_BkSZcA0McR2WH2OdByNQg6PKO86jhljIu9dXBi72_daJvYkLgldqfKgfVg__6a7dW1rOMDLEhL9Ir7WVlUI3E7MidQ12KqKJl8b1c99dqOGGRjeQzfwh6ILBGDpR3kjKs9Kh1bJigBM3sejwcbWL0skCxpjMFohIa3U5Z02h-jxAAKiJm6ZTIpoxR8QF1dyU6SdNDfdRMcM1TlVqbgMxIpdPYK3Xcgj9K1Mf40iebyW3kZnueuSg'
+      Authorization: 'Bearer <Your Auth Token>'
 scenarios:
   - flow:
     - function: "generateRandomData"
